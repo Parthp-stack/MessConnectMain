@@ -16,7 +16,7 @@ import {
   Home, Search, Heart, ClipboardList, Bell, User, MapPin, SlidersHorizontal,
   Star, Utensils, CheckCircle2, Pause, Play, Clock, Sparkles, Tag, Shield,
   CreditCard, ChevronRight, X, RotateCcw, AlertTriangle, RefreshCw, QrCode,
-  Ticket, Users, Zap, Settings, Navigation, Megaphone
+  Ticket, Users, Zap, Settings, Navigation, Megaphone, LogOut
 } from 'lucide-react';
 import { fetchLiveLocationZomatoStyle } from '../utils/geolocation';
 

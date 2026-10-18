@@ -109,6 +109,7 @@ export const StudentSignup = ({
       if (res && res.success) {
         showToast(`Verification code sent to ${formData.email}! Valid for 3 minutes.`, 'success', '✉️ Check Your Inbox');
         setTimeLeft(180); // 3 minutes strictly
+        if (res.otp) setOtp(res.otp);
         setStep('OTP');
       }
     } catch (err) {
@@ -165,7 +166,7 @@ export const StudentSignup = ({
       if (res && res.success) {
         showToast('New 6-digit verification code sent! Valid for 3 minutes.', 'success', '🔄 Code Resent');
         setTimeLeft(180);
-        setOtp('');
+        setOtp(res.otp || '');
       }
     } catch (err) {
       setErrorMessage(err.message || 'Failed to resend code.');

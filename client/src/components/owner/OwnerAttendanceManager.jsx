@@ -7,7 +7,7 @@ import {
   QrCode, Users, CheckCircle2, XCircle, Clock, Calendar,
   RefreshCw, Search, SlidersHorizontal, Download, TrendingUp,
   AlertTriangle, StopCircle, BarChart3, Sparkles, Check, Zap,
-  Eye, RotateCw, MapPin, Shield, Settings, FileText, Send,
+  Eye, RotateCw, MapPin, Shield, ShieldCheck, Settings, FileText, Send,
   UserCheck, ChevronRight, X, AlertCircle, Printer
 } from 'lucide-react';
 

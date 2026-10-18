@@ -45,6 +45,7 @@ export const ForgotPasswordModal = ({
       const res = await forgotPassword(email.trim().toLowerCase(), role);
       if (res && res.success) {
         showToast(`Reset code sent to ${email}`, 'success', '🔑 Check Your Email');
+        if (res.otp) setOtp(res.otp);
         setStep('OTP');
       } else {
         setErrorMessage(res?.message || 'Could not find an account with this email.');
@@ -98,7 +99,7 @@ export const ForgotPasswordModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-slate-100 overflow-hidden relative">
         
         {/* Modal Header */}

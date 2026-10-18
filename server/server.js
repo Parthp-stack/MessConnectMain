@@ -92,13 +92,26 @@ app.get('/api/health', async (req, res) => {
   });
 });
 
+// Serve Flutter Web if built
+const flutterDist = path.resolve(__dirname, '..', 'flutter_app', 'build', 'web');
+if (fs.existsSync(flutterDist)) {
+  app.use('/flutter', express.static(flutterDist));
+  app.get('/flutter/*', (req, res, next) => {
+    const flutterIndex = path.resolve(flutterDist, 'index.html');
+    if (fs.existsSync(flutterIndex)) {
+      return res.sendFile(flutterIndex);
+    }
+    next();
+  });
+}
+
 // Serve client in production if built
 const clientDist = path.resolve(__dirname, '..', 'client', 'dist');
 app.use(express.static(clientDist));
 
 // SPA Fallback: serve index.html for all non-API GET routes to support client-side routing
 app.get('*', (req, res, next) => {
-  if (req.path.startsWith('/api')) return next();
+  if (req.path.startsWith('/api') || req.path.startsWith('/flutter')) return next();
   const indexHtml = path.resolve(clientDist, 'index.html');
   if (fs.existsSync(indexHtml)) {
     return res.sendFile(indexHtml);

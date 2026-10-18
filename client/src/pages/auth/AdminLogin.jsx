@@ -50,41 +50,41 @@ export const AdminLogin = ({
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-indigo-950 flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8 text-slate-100">
+    <div className="min-h-screen bg-gradient-to-b from-slate-100 via-white to-slate-100 flex flex-col justify-between py-8 px-4 sm:px-6 lg:px-8 text-slate-800">
       
       {/* Top Navigation */}
       <div className="max-w-md sm:max-w-lg mx-auto w-full flex items-center justify-between mb-4">
         <button
           onClick={onBackToHome}
-          className="flex items-center gap-1.5 text-xs font-bold text-slate-400 hover:text-white transition px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800"
+          className="flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 transition px-3 py-1.5 rounded-full bg-white border border-slate-200 shadow-2xs cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
           <span>Exit to Public Portal</span>
         </button>
 
-        <span className="flex items-center gap-1.5 text-[11px] font-mono text-indigo-400 font-bold px-3 py-1 rounded-full bg-indigo-950 border border-indigo-800">
-          <ShieldAlert className="w-3.5 h-3.5" />
+        <span className="flex items-center gap-1.5 text-[11px] font-mono text-indigo-700 font-bold px-3 py-1 rounded-full bg-indigo-50 border border-indigo-200">
+          <ShieldAlert className="w-3.5 h-3.5 text-indigo-600" />
           <span>Restricted Portal</span>
         </span>
       </div>
 
       {/* Main Admin Login Card */}
-      <div className="max-w-md w-full mx-auto bg-slate-900/90 rounded-3xl shadow-2xl border border-slate-800 overflow-hidden my-auto backdrop-blur-md">
+      <div className="max-w-md w-full mx-auto bg-white rounded-3xl shadow-xl border border-slate-200 overflow-hidden my-auto">
         
         {/* Banner */}
-        <div className="bg-gradient-to-r from-indigo-900 via-indigo-950 to-slate-900 p-7 text-white border-b border-indigo-800/40 relative">
+        <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-indigo-950 p-7 text-white relative">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-indigo-600/30 border border-indigo-500/40 flex items-center justify-center shadow-inner">
-              <KeyRound className="w-6 h-6 text-indigo-400" />
+            <div className="w-12 h-12 rounded-2xl bg-white/10 border border-white/20 flex items-center justify-center shadow-inner backdrop-blur-xs">
+              <KeyRound className="w-6 h-6 text-indigo-300" />
             </div>
             <div>
-              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 font-extrabold text-[10px] tracking-wider uppercase border border-indigo-500/30">
+              <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 text-indigo-200 font-extrabold text-[10px] tracking-wider uppercase border border-indigo-400/30">
                 SuperAdmin Gateway
               </span>
               <h1 className="text-xl font-black tracking-tight mt-0.5">Control Center Sign In</h1>
             </div>
           </div>
-          <p className="text-slate-400 text-xs mt-3 leading-relaxed">
+          <p className="text-slate-300 text-xs mt-3 leading-relaxed">
             Platform governance, owner verification, FSSAI compliance checks, and platform revenue management.
           </p>
         </div>
@@ -92,8 +92,8 @@ export const AdminLogin = ({
         <div className="p-6 sm:p-7">
           {/* Error Message */}
           {errorMessage && (
-            <div className="mb-4 p-3 rounded-2xl bg-rose-950/80 border border-rose-700 text-rose-300 text-xs flex items-start gap-2 animate-in fade-in">
-              <AlertCircle className="w-4 h-4 text-rose-400 shrink-0 mt-0.5" />
+            <div className="mb-4 p-3 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs flex items-start gap-2 animate-in fade-in">
+              <AlertCircle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
               <span>{errorMessage}</span>
             </div>
           )}
@@ -101,35 +101,35 @@ export const AdminLogin = ({
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 Admin Email or Mobile Number
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   required
                   value={identifier}
                   onChange={(e) => setIdentifier(e.target.value)}
                   placeholder="admin@messconnect.in or 9423490513"
-                  className="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-2xl text-xs text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-slate-700 mb-1.5">
                 Security Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <Lock className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter security password"
-                  className="w-full pl-10 pr-4 py-3 bg-slate-950 border border-slate-800 rounded-2xl text-xs text-white placeholder-slate-600 focus:outline-none focus:ring-2 focus:ring-indigo-500/40 focus:border-indigo-500"
+                  className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
                 />
               </div>
             </div>
@@ -137,7 +137,7 @@ export const AdminLogin = ({
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-2xl font-bold text-xs shadow-lg shadow-indigo-950 transition flex items-center justify-center gap-2 disabled:opacity-50 mt-2"
+              className="w-full py-3.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-2xl font-bold text-xs shadow-md shadow-indigo-500/20 transition flex items-center justify-center gap-2 disabled:opacity-50 mt-2 cursor-pointer"
             >
               <ShieldCheck className="w-4 h-4" />
               <span>{loading ? 'Verifying Authorization...' : 'Authenticate & Enter Admin Console'}</span>
@@ -146,12 +146,12 @@ export const AdminLogin = ({
           </form>
 
           {/* Quick Demo Credentials Helper */}
-          <div className="mt-4 pt-4 border-t border-slate-800 text-[11px] text-slate-400 space-y-1">
-            <div className="flex items-center justify-between text-slate-400">
-              <span className="font-semibold text-slate-300">Admin Support & Lead:</span>
-              <span className="font-mono text-indigo-400">Parth (9423490513)</span>
+          <div className="mt-4 pt-4 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
+            <div className="flex items-center justify-between">
+              <span className="font-semibold text-slate-700">Admin Support & Lead:</span>
+              <span className="font-mono text-indigo-600 font-bold">Parth (9423490513)</span>
             </div>
-            <div className="flex items-center justify-between text-slate-500 text-[10px]">
+            <div className="flex items-center justify-between text-[10px] text-slate-400">
               <span>Helpline Representatives:</span>
               <span>Rohit (8766793139) • Shreyash (9309294400)</span>
             </div>
@@ -160,7 +160,7 @@ export const AdminLogin = ({
         </div>
       </div>
 
-      <div className="text-center text-[11px] text-slate-500 mt-6 font-mono">
+      <div className="text-center text-[11px] text-slate-400 mt-6 font-mono">
         MessConnect Internal Infrastructure • TLS 1.3 Role Guard Enforced
       </div>
 

@@ -48,7 +48,7 @@
       "messId": null,
       "messName": null,
       "createdAt": "2026-10-12T15:31:38.546Z",
-      "updatedAt": "2026-10-12T10:26:46.000Z"
+      "updatedAt": "2026-10-12T22:17:47.000Z"
     },
     {
       "id": "user_cust_1791819122448",
@@ -217,6 +217,86 @@
       "createdAt": "2026-10-12T15:54:17.468Z",
       "updatedAt": "2026-10-12T10:28:54.000Z",
       "status": "ACTIVE"
+    },
+    {
+      "id": "user_owner_1792035287218",
+      "name": "Kailsh Kajle",
+      "email": "exampleexample942349@gmail.com",
+      "phone": "9423490123",
+      "password": "@Xyz12345",
+      "role": "OWNER",
+      "avatar": "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&auto=format&fit=crop&q=80",
+      "college": null,
+      "location": "Alandi",
+      "diet": null,
+      "department": null,
+      "preferences": {},
+      "verificationStatus": "APPROVED",
+      "verified": true,
+      "reviewNotes": "Account automatically verified and approved for student dining.",
+      "documents": {
+        "license": {
+          "title": "FSSAI Food Safety License",
+          "fileUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
+          "fileName": "fssai_license_2026.pdf",
+          "fileSize": "1.1 MB",
+          "fileType": "application/pdf",
+          "docNumber": "11524021000849"
+        },
+        "ownerId": {
+          "title": "Owner Identity (Aadhaar Card)",
+          "fileUrl": "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80",
+          "fileName": "aadhaar_card_scanned.jpg",
+          "fileSize": "420 KB",
+          "fileType": "image/jpeg",
+          "docNumber": "5819-2041-8921"
+        },
+        "businessDoc": {
+          "title": "Shop & Establishment Act",
+          "fileUrl": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&auto=format&fit=crop&q=80",
+          "fileName": "shop_act_license.jpg",
+          "fileSize": "360 KB",
+          "fileType": "image/jpeg",
+          "docNumber": "MH-PUN-2024-819"
+        },
+        "addressProof": {
+          "title": "Premises Address Proof",
+          "fileUrl": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&auto=format&fit=crop&q=80",
+          "fileName": "electricity_bill.pdf",
+          "fileSize": "510 KB",
+          "fileType": "application/pdf",
+          "docNumber": "MSEB-0982-124"
+        }
+      },
+      "messId": "mess_1792035287218",
+      "messName": "Anpurna Cateen",
+      "createdAt": "2026-10-15T03:34:47.219Z",
+      "updatedAt": "2026-10-14T22:26:17.000Z",
+      "status": "ACTIVE"
+    },
+    {
+      "id": "user_cust_1792039147369",
+      "name": "Test Student",
+      "email": "test_student_otp@example.com",
+      "phone": "9876543299",
+      "password": "@Password123",
+      "role": "CUSTOMER",
+      "emailVerified": true,
+      "verified": true,
+      "status": "ACTIVE",
+      "verificationStatus": "APPROVED",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+      "college": "Pune University",
+      "location": "Pune",
+      "dietaryType": "Both Veg & Non-Veg",
+      "preferences": {
+        "diet": "Both Veg & Non-Veg",
+        "mealReminders": true,
+        "reminderTime": "08:00",
+        "subscriptionAlerts": true,
+        "offers": true
+      },
+      "createdAt": "2026-10-15T04:39:07.369Z"
     }
   ],
   "messes": [
@@ -538,6 +618,131 @@
       "weeklyMenu": {},
       "createdAt": "2026-10-12T10:24:17.000Z",
       "updatedAt": "2026-10-12T10:28:54.000Z"
+    },
+    {
+      "id": "mess_1792035287218",
+      "ownerId": "user_owner_1792035287218",
+      "name": "Anpurna Cateen",
+      "tagline": "Delicious, hygienic & homely meals",
+      "description": "Welcome to Anpurna Cateen! Serving fresh, tasty meals prepared with high hygiene standards. Unlimited roti, dal, sabji, and rice.",
+      "area": "Alandi",
+      "city": "Pune",
+      "pincode": "412105",
+      "address": "Alandi, Pune",
+      "coordinates": {
+        "lat": 18.5204,
+        "lng": 73.8567
+      },
+      "distance": "0.8 km",
+      "rating": 5,
+      "reviewCount": 1,
+      "pricePerMonth": 3200,
+      "isPureVeg": false,
+      "hasVeg": true,
+      "hasNonVeg": true,
+      "trialAvailable": true,
+      "trialPrice": 70,
+      "verified": true,
+      "featured": false,
+      "status": "ACTIVE",
+      "verificationStatus": "APPROVED",
+      "reviewNotes": "Account automatically verified and approved for student dining.",
+      "documents": {
+        "license": {
+          "title": "FSSAI Food Safety License",
+          "fileUrl": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600&auto=format&fit=crop&q=80",
+          "fileName": "fssai_license_2026.pdf",
+          "fileSize": "1.1 MB",
+          "fileType": "application/pdf",
+          "docNumber": "11524021000849"
+        },
+        "ownerId": {
+          "title": "Owner Identity (Aadhaar Card)",
+          "fileUrl": "https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&auto=format&fit=crop&q=80",
+          "fileName": "aadhaar_card_scanned.jpg",
+          "fileSize": "420 KB",
+          "fileType": "image/jpeg",
+          "docNumber": "5819-2041-8921"
+        },
+        "businessDoc": {
+          "title": "Shop & Establishment Act",
+          "fileUrl": "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=600&auto=format&fit=crop&q=80",
+          "fileName": "shop_act_license.jpg",
+          "fileSize": "360 KB",
+          "fileType": "image/jpeg",
+          "docNumber": "MH-PUN-2024-819"
+        },
+        "addressProof": {
+          "title": "Premises Address Proof",
+          "fileUrl": "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&auto=format&fit=crop&q=80",
+          "fileName": "electricity_bill.pdf",
+          "fileSize": "510 KB",
+          "fileType": "application/pdf",
+          "docNumber": "MSEB-0982-124"
+        }
+      },
+      "phone": "9423490123",
+      "whatsapp": "9423490123",
+      "email": "exampleexample942349@gmail.com",
+      "coverImage": "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=800&auto=format&fit=crop&q=80",
+      "gallery": [
+        "https://images.unsplash.com/photo-1546833999-b9f581a1996d?w=600&auto=format&fit=crop&q=80",
+        "https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=600&auto=format&fit=crop&q=80"
+      ],
+      "timings": {
+        "lunch": "12:30 PM - 03:30 PM",
+        "dinner": "07:30 PM - 10:30 PM",
+        "breakfast": "07:30 AM - 10:00 AM"
+      },
+      "features": [
+        "Fresh Hot Rotis",
+        "RO Purified Drinking Water",
+        "Weekly Special Feast",
+        "Clean & Sanitized Kitchen"
+      ],
+      "plans": [
+        {
+          "id": "plan_mess_1792035287218_all",
+          "name": "All Meals (Breakfast, Lunch & Dinner)",
+          "type": "ALL_MEALS",
+          "price": 3200,
+          "daysCount": 30,
+          "description": "Full monthly plan with 3 fresh meals every day.",
+          "mealsPerDay": 3
+        },
+        {
+          "id": "plan_mess_1792035287218_two",
+          "name": "2 Meals (Lunch & Dinner)",
+          "type": "TWO_MEALS",
+          "price": 2560,
+          "daysCount": 30,
+          "description": "Lunch & Dinner combo for college students.",
+          "mealsPerDay": 2
+        }
+      ],
+      "menuToday": {
+        "lunch": [
+          "4 Soft Phulkas",
+          "Panchratna Dal",
+          "Aloo Gobi Sabji",
+          "Jeera Rice",
+          "Salad"
+        ],
+        "dinner": [
+          "Warm Rotis",
+          "Special Curry",
+          "Tadka Dal",
+          "Steamed Rice",
+          "Gulab Jamun"
+        ],
+        "breakfast": [
+          "Hot Poha with sev & lemon",
+          "Ginger Chai"
+        ]
+      },
+      "weeklyMenu": {},
+      "createdAt": "2026-10-14T22:04:49.000Z",
+      "updatedAt": "2026-10-14T22:10:09.000Z"
     }
   ],
   "subscriptions": [
@@ -971,6 +1176,36 @@
       "autoRotateQrEnabled": false,
       "qrRotationIntervalMinutes": 5,
       "updatedAt": "2026-10-12T10:02:02.000Z"
+    },
+    {
+      "messId": "mess_1791820457468",
+      "breakfastStart": "07:30",
+      "breakfastEnd": "10:30",
+      "lunchStart": "12:00",
+      "lunchEnd": "15:30",
+      "dinnerStart": "19:30",
+      "dinnerEnd": "22:30",
+      "lowAttendanceThreshold": 75,
+      "locationVerificationEnabled": false,
+      "radiusMeters": 100,
+      "autoRotateQrEnabled": false,
+      "qrRotationIntervalMinutes": 5,
+      "updatedAt": "2026-10-14T22:18:17.000Z"
+    },
+    {
+      "messId": "mess_1792035287218",
+      "breakfastStart": "07:30",
+      "breakfastEnd": "10:30",
+      "lunchStart": "12:00",
+      "lunchEnd": "15:30",
+      "dinnerStart": "19:30",
+      "dinnerEnd": "22:30",
+      "lowAttendanceThreshold": 75,
+      "locationVerificationEnabled": false,
+      "radiusMeters": 100,
+      "autoRotateQrEnabled": false,
+      "qrRotationIntervalMinutes": 5,
+      "updatedAt": "2026-10-14T22:22:12.000Z"
     }
   ],
   "announcements": [
