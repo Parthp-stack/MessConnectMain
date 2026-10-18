@@ -450,7 +450,7 @@ export const CustomerView = ({
           <div className="p-5 space-y-5 animate-in fade-in duration-150">
             {/* Greeting */}
             <div>
-              <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Good Morning 👋</h2>
+              <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">Welcome, {currentUser?.name || 'Student'} 👋</h2>
               <p className="text-xs text-slate-500">Find your perfect mess near college</p>
             </div>
 
@@ -501,9 +501,10 @@ export const CustomerView = ({
             )}
 
             {/* Phase 4: Active Subscription Widget (Section 9, 10, 11) */}
-            {subscriptions.length > 0 ? (
+            {Array.isArray(subscriptions) && subscriptions.length > 0 ? (
               (() => {
-                const currentSub = subscriptions.find(s => s.status === 'ACTIVE') || subscriptions.find(s => s.status === 'PAUSED') || subscriptions[0];
+                const currentSub = subscriptions.find(s => s?.status === 'ACTIVE') || subscriptions.find(s => s?.status === 'PAUSED') || subscriptions[0];
+                if (!currentSub) return null;
                 const daysLeft = currentSub.endDate ? Math.ceil((new Date(currentSub.endDate) - new Date()) / (1000 * 60 * 60 * 24)) : 0;
                 const isExpiringSoon = currentSub.status === 'ACTIVE' && daysLeft <= 5;
                 const isExpired = currentSub.status === 'EXPIRED' || daysLeft <= 0;

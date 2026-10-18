@@ -74,4 +74,36 @@ router.post(['/query', '/ticket', '/contact', '/'], async (req, res) => {
   }
 });
 
+// POST /api/support/report-error
+router.post('/report-error', (req, res) => {
+  try {
+    const report = req.body || {};
+    const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'unknown';
+    console.warn(`⚠️ [Client Incident Telemetry] ID: ${report.id || 'N/A'} | User: ${report.user?.name || 'Anon'} (${report.user?.role || 'Guest'}) | Error: ${report.message || 'No message'} | URL: ${report.system?.url || 'N/A'} | IP: ${clientIp}`);
+
+    if (db && db.data) {
+      if (!db.data.errorLogs) db.data.errorLogs = [];
+      db.data.errorLogs.unshift({
+        ...report,
+        clientIp,
+        receivedAt: new Date().toISOString()
+      });
+      if (db.data.errorLogs.length > 100) {
+        db.data.errorLogs.pop();
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      trackingId: report.id || 'MC-LOG-' + Date.now().toString().slice(-6),
+      supportEmail: 'support@messconnect.in',
+      adminEmail: 'parthmhaske1234@gmail.com'
+    });
+  } catch (err) {
+    console.error('Error recording client error telemetry:', err);
+    res.status(200).json({ success: false, message: 'Telemetry acknowledged' });
+  }
+});
+
 module.exports = router;
+

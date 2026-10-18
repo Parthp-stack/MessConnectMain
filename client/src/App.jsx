@@ -6,6 +6,7 @@ import { api } from './services/api';
 
 import { MobileShell } from './components/common/MobileShell';
 import { ToastContainer } from './components/common/ToastContainer';
+import { GlobalErrorAlert } from './components/common/GlobalErrorAlert';
 import { MessDetailsModal } from './components/customer/MessDetailsModal';
 import { TrialBookingModal } from './components/customer/TrialBookingModal';
 import { MockPaymentModal } from './components/payments/MockPaymentModal';
@@ -25,6 +26,7 @@ import { ForgotPasswordModal } from './pages/auth/ForgotPasswordModal';
 import { CustomerView } from './pages/CustomerView';
 import { OwnerView } from './pages/OwnerView';
 import { AdminView } from './pages/AdminView';
+import { ErrorBoundary } from './components/common/ErrorBoundary';
 
 // Inner App with context access
 const AppContent = () => {
@@ -162,20 +164,31 @@ const AppContent = () => {
       onBackToHome={() => setAuthView('portal')}
     >
       <ToastContainer />
+      <GlobalErrorAlert />
 
       {/* 1. AUTHENTICATED PERSONA VIEWS */}
       {isAuthenticated && currentRole === 'CUSTOMER' && (
-        <CustomerView
-          onOpenDetails={handleOpenDetails}
-          onBookTrial={handleBookTrial}
-          onSubscribe={handleSubscribe}
-          onOpenLocationModal={() => setShowLocationModal(true)}
-        />
+        <ErrorBoundary>
+          <CustomerView
+            onOpenDetails={handleOpenDetails}
+            onBookTrial={handleBookTrial}
+            onSubscribe={handleSubscribe}
+            onOpenLocationModal={() => setShowLocationModal(true)}
+          />
+        </ErrorBoundary>
       )}
 
-      {isAuthenticated && currentRole === 'OWNER' && <OwnerView />}
+      {isAuthenticated && currentRole === 'OWNER' && (
+        <ErrorBoundary>
+          <OwnerView />
+        </ErrorBoundary>
+      )}
 
-      {isAuthenticated && currentRole === 'ADMIN' && <AdminView />}
+      {isAuthenticated && currentRole === 'ADMIN' && (
+        <ErrorBoundary>
+          <AdminView />
+        </ErrorBoundary>
+      )}
 
       {/* 2. UNAUTHENTICATED PUBLIC & DEDICATED AUTH FLOWS */}
       {!isAuthenticated && (

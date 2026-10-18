@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useNotification } from '../../context/NotificationContext';
-import { DocumentViewerModal } from '../../components/common/DocumentViewerModal';
 import {
   ChefHat, Mail, Phone, Lock, User, Store,
   MapPin, IndianRupee, Navigation, ArrowRight, AlertCircle, ChevronLeft, GraduationCap,
@@ -116,7 +115,6 @@ export const OwnerSignup = ({
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [previewModalDoc, setPreviewModalDoc] = useState(null);
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
 
   const handleChange = (field, val) => {
@@ -840,7 +838,7 @@ export const OwnerSignup = ({
               </div>
 
               <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-[11px] text-slate-500 text-center">
-                🛡️ <strong>Notice:</strong> Once verified, your mess listing will enter <span className="text-amber-700 font-bold">UNDER REVIEW</span> for SuperAdmin verification. Mess Owners can log in anytime with either your password or via <strong>Email OTP</strong>!
+                🛡️ <strong>Notice:</strong> Once email OTP is verified, your mess listing is active! Mess Owners can log in anytime with either your password or via <strong>Email OTP</strong>.
               </div>
             </form>
           )}
@@ -862,12 +860,6 @@ export const OwnerSignup = ({
         </div>
       </div>
 
-      {/* FULL SIZE DOCUMENT PREVIEW MODAL */}
-      <DocumentViewerModal
-        doc={previewModalDoc}
-        isOpen={Boolean(previewModalDoc)}
-        onClose={() => setPreviewModalDoc(null)}
-      />
 
       <div className="text-center text-[11px] text-slate-400 mt-6">
         MessConnect Business Portal • Connecting Verified Messes with Campus Students

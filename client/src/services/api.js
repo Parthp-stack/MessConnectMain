@@ -1,5 +1,5 @@
-// API Service with Offline-First Resilient Fallback
 import { storage } from './storage';
+import { errorTracker } from '../utils/errorTracker';
 
 const getBaseUrl = () => {
   const envUrl = (typeof import.meta !== 'undefined' && import.meta.env && (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL)) || '';
@@ -89,6 +89,14 @@ class ApiService {
             count: cached.length
           };
         }
+      }
+
+      if (err && err.message !== 'OFFLINE_MODE') {
+        errorTracker.trackError(err, {
+          origin: 'api.fetchWithFallback',
+          url,
+          method: options.method || 'GET'
+        });
       }
 
       throw err;

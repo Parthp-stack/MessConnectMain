@@ -193,4 +193,13 @@ function startServer() {
   });
 }
 
+// Global process crash prevention guards for production hosting on Render
+process.on('uncaughtException', (err) => {
+  console.error('💥 [Server Process UncaughtException]:', err.message, err.stack);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('💥 [Server Process UnhandledRejection]:', reason);
+});
+
 startServer();

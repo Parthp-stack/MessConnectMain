@@ -79,6 +79,34 @@
       "updatedAt": "2026-10-12T10:26:46.000Z"
     },
     {
+      "id": "user_cust_1792039147369",
+      "name": "Test Student",
+      "email": "test_student_otp@example.com",
+      "phone": "9876543299",
+      "password": "@Password123",
+      "role": "CUSTOMER",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
+      "college": "Pune University",
+      "location": "Pune",
+      "diet": null,
+      "department": null,
+      "preferences": {
+        "diet": "Both Veg & Non-Veg",
+        "offers": true,
+        "reminderTime": "08:00",
+        "mealReminders": true,
+        "subscriptionAlerts": true
+      },
+      "verificationStatus": "APPROVED",
+      "verified": true,
+      "reviewNotes": null,
+      "documents": {},
+      "messId": null,
+      "messName": null,
+      "createdAt": "2026-10-15T04:39:07.369Z",
+      "updatedAt": "2026-10-14T23:09:09.000Z"
+    },
+    {
       "id": "user_cust_demo_1",
       "name": "Nilesh Patil",
       "email": "parthgopalpatil@gmail.com",
@@ -273,30 +301,6 @@
       "createdAt": "2026-10-15T03:34:47.219Z",
       "updatedAt": "2026-10-14T22:26:17.000Z",
       "status": "ACTIVE"
-    },
-    {
-      "id": "user_cust_1792039147369",
-      "name": "Test Student",
-      "email": "test_student_otp@example.com",
-      "phone": "9876543299",
-      "password": "@Password123",
-      "role": "CUSTOMER",
-      "emailVerified": true,
-      "verified": true,
-      "status": "ACTIVE",
-      "verificationStatus": "APPROVED",
-      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&auto=format&fit=crop&q=80",
-      "college": "Pune University",
-      "location": "Pune",
-      "dietaryType": "Both Veg & Non-Veg",
-      "preferences": {
-        "diet": "Both Veg & Non-Veg",
-        "mealReminders": true,
-        "reminderTime": "08:00",
-        "subscriptionAlerts": true,
-        "offers": true
-      },
-      "createdAt": "2026-10-15T04:39:07.369Z"
     }
   ],
   "messes": [
