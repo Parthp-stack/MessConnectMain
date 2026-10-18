@@ -3,10 +3,13 @@ const router = express.Router();
 const crypto = require('crypto');
 const db = require('../db/database');
 
-const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || '';
-const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || '';
+const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_prototype_sandbox';
+const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'prototype_mock_secret_key_2026';
 const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET || '';
-const RAZORPAY_TEST_MODE = process.env.NODE_ENV !== 'production' || (RAZORPAY_KEY_ID && RAZORPAY_KEY_ID.startsWith('rzp_test_'));
+
+// Live mode only applies if a real commercial production key (starting with rzp_live_) is configured
+const isLiveCommercialMode = RAZORPAY_KEY_ID.startsWith('rzp_live_') && process.env.ENABLE_PAYMENT_SIMULATION !== 'true';
+const RAZORPAY_TEST_MODE = !isLiveCommercialMode;
 
 // 1. GET /api/payments/config - Public client Razorpay configuration
 // STRICT SECURITY RULE: NEVER exposes RAZORPAY_KEY_SECRET!
@@ -204,10 +207,10 @@ router.post(['/create-order', '/create'], (req, res) => {
 // 4. POST /api/payments/simulate-gateway-response
 // Test Mode Sandbox Simulator Endpoint: simulates client completing Razorpay checkout modal
 router.post('/simulate-gateway-response', (req, res) => {
-  if (!RAZORPAY_TEST_MODE) {
+  if (isLiveCommercialMode) {
     return res.status(403).json({
       success: false,
-      message: 'Gateway simulation is disabled in production live mode.'
+      message: 'Gateway simulation is disabled in live commercial production mode with active bank credentials.'
     });
   }
 
