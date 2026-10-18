@@ -1,0 +1,58 @@
+services:
+  # ==============================================================================
+  # 1. BACKEND SERVICE (Node.js + Express API)
+  # ==============================================================================
+  - type: web
+    name: messconnect-server
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server/server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: DB_HOST
+        sync: false
+      - key: DB_PORT
+        value: "3306"
+      - key: DB_USER
+        sync: false
+      - key: DB_PASSWORD
+        sync: false
+      - key: DB_NAME
+        value: messconnectproject
+      - key: DB_SSL
+        value: REQUIRED
+      - key: DB_SSL_REJECT_UNAUTHORIZED
+        value: "false"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: RESEND_API_KEY
+        sync: false
+      - key: EMAIL_FROM
+        value: onboarding@resend.dev
+      - key: EMAIL_SENDER_NAME
+        value: "MessConnect Verification"
+      - key: ADMIN_EMAIL
+        value: parthmhaske1234@gmail.com
+
+  # ==============================================================================
+  # 2. FRONTEND CLIENT (React + Vite Static Site)
+  # ==============================================================================
+  - type: static
+    name: messconnect-client
+    plan: free
+    rootDir: client
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        sync: false
+    routes:
+      # SPA fallback routing rule to prevent 404 on page reload
+      - type: rewrite
+        source: /*
+        destination: /index.html
