@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { AppProvider, useApp } from './context/AppContext';
 import { NotificationProvider, useNotification } from './context/NotificationContext';
@@ -28,6 +28,20 @@ import { OwnerView } from './pages/OwnerView';
 import { AdminView } from './pages/AdminView';
 import { ErrorBoundary } from './components/common/ErrorBoundary';
 
+// Secret admin route detector (hidden from students and mess owners)
+const isSecretAdminRoute = () => {
+  if (typeof window === 'undefined') return false;
+  const path = (window.location.pathname || '').toLowerCase();
+  const hash = (window.location.hash || '').toLowerCase();
+  const search = (window.location.search || '').toLowerCase();
+  return (
+    path === '/mc-admin' ||
+    path.startsWith('/mc-admin/') ||
+    hash === '#mc-admin' ||
+    search.includes('mc-admin')
+  );
+};
+
 // Inner App with context access
 const AppContent = () => {
   const { currentRole, currentUser, isAuthenticated } = useAuth();
@@ -36,13 +50,25 @@ const AppContent = () => {
 
   // Navigation state for unauthenticated flows: 'portal' | 'student-login' | 'student-signup' | 'owner-login' | 'owner-signup' | 'admin-login'
   const [authView, setAuthView] = useState(() => {
-    if (typeof window !== 'undefined') {
-      if (window.location.search.includes('admin') || window.location.hash === '#admin') {
-        return 'admin-login';
-      }
+    if (isSecretAdminRoute()) {
+      return 'admin-login';
     }
     return 'portal';
   });
+
+  useEffect(() => {
+    const handleUrlChange = () => {
+      if (isSecretAdminRoute()) {
+        setAuthView('admin-login');
+      }
+    };
+    window.addEventListener('popstate', handleUrlChange);
+    window.addEventListener('hashchange', handleUrlChange);
+    return () => {
+      window.removeEventListener('popstate', handleUrlChange);
+      window.removeEventListener('hashchange', handleUrlChange);
+    };
+  }, []);
 
   // Forgot password modal state
   const [forgotPasswordState, setForgotPasswordState] = useState({
@@ -247,7 +273,12 @@ const AppContent = () => {
 
           {authView === 'admin-login' && (
             <AdminLogin
-              onBackToHome={() => setAuthView('portal')}
+              onBackToHome={() => {
+                if (typeof window !== 'undefined' && window.history && window.history.pushState) {
+                  window.history.pushState({}, '', '/');
+                }
+                setAuthView('portal');
+              }}
               onLoginSuccess={() => setAuthView('portal')}
             />
           )}

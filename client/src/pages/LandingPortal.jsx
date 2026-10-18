@@ -527,13 +527,6 @@ export const LandingPortal = ({
             >
               Refunds
             </button>
-            <span>•</span>
-            <button
-              onClick={onOpenAdminLogin}
-              className="text-slate-400 hover:text-indigo-600 font-mono text-[11px] cursor-pointer"
-            >
-              Admin Access
-            </button>
           </div>
         </div>
       </footer>
