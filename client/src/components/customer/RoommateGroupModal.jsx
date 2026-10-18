@@ -4,7 +4,7 @@ import { useAuth } from '../../context/AuthContext';
 import { useNotification } from '../../context/NotificationContext';
 import {
   Users, UserPlus, Pause, Play, Share2, Sparkles, Copy,
-  CheckCircle2, AlertCircle, X, Calendar, ShieldCheck
+  CheckCircle2, AlertCircle, X, Calendar, ShieldCheck, Plus, ArrowLeft, Building2
 } from 'lucide-react';
 
 export const RoommateGroupModal = ({ isOpen, onClose }) => {
@@ -19,10 +19,16 @@ export const RoommateGroupModal = ({ isOpen, onClose }) => {
   const [pauseReason, setPauseReason] = useState('Semester Mid-Term Break');
   const [syncing, setSyncing] = useState(false);
 
-  // Join group state
-  const [showJoinInput, setShowJoinInput] = useState(false);
+  // Group join/create entry mode: 'menu' | 'join' | 'create'
+  const [entryMode, setEntryMode] = useState('menu');
   const [inviteCodeInput, setInviteCodeInput] = useState('');
   const [joining, setJoining] = useState(false);
+
+  // Create squad state
+  const [podNameInput, setPodNameInput] = useState('');
+  const [selectedMessId, setSelectedMessId] = useState('');
+  const [messes, setMesses] = useState([]);
+  const [creating, setCreating] = useState(false);
 
   const fetchGroup = async () => {
     if (!currentUser?.id) {
@@ -48,6 +54,14 @@ export const RoommateGroupModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen) {
       fetchGroup();
+      setEntryMode('menu');
+      api.getMesses().then(res => {
+        const list = res?.messes || (Array.isArray(res) ? res : []);
+        setMesses(list);
+        if (list.length > 0) {
+          setSelectedMessId(prev => prev || list[0].id);
+        }
+      }).catch(() => {});
     }
   }, [isOpen]);
 
@@ -56,6 +70,39 @@ export const RoommateGroupModal = ({ isOpen, onClose }) => {
   const handleCopyCode = (code) => {
     navigator.clipboard?.writeText(code);
     showToast(`Invite code ${code} copied to clipboard!`, 'info', '📋 Copied');
+  };
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    if (!currentUser?.id) {
+      showToast('Please sign in as a student to create a pod.', 'info');
+      return;
+    }
+    if (!selectedMessId) {
+      showToast('Please select a mess for your squad.', 'error');
+      return;
+    }
+    setCreating(true);
+    try {
+      const res = await api.createGroup({
+        name: podNameInput?.trim() || `${currentUser.name || 'Student'}'s Squad`,
+        adminUserId: currentUser.id,
+        messId: selectedMessId
+      });
+
+      if (res && res.success) {
+        showToast(res.message || 'Mess Pod created successfully!', 'success', '🎉 Pod Created');
+        fetchGroup();
+        setEntryMode('menu');
+        setPodNameInput('');
+      } else {
+        showToast(res?.message || 'Failed to create pod', 'error');
+      }
+    } catch (err) {
+      showToast('Failed to create pod. Try again.', 'error');
+    } finally {
+      setCreating(false);
+    }
   };
 
   const handleSyncPause = async (e) => {
@@ -97,12 +144,12 @@ export const RoommateGroupModal = ({ isOpen, onClose }) => {
       });
 
       if (res && res.success) {
-        showToast(res.message, 'success');
+        showToast(res.message || 'Successfully joined the pod!', 'success', '🤝 Squad Joined');
         fetchGroup();
-        setShowJoinInput(false);
+        setEntryMode('menu');
         setInviteCodeInput('');
       } else {
-        showToast('Invalid invite code', 'error');
+        showToast(res?.message || 'Invalid invite code or pod not found', 'error');
       }
     } catch (e) {
       showToast('Failed to join group', 'error');
@@ -288,40 +335,139 @@ export const RoommateGroupModal = ({ isOpen, onClose }) => {
               </div>
             </>
           ) : (
-            <div className="py-8 text-center space-y-4">
-              <Users className="w-12 h-12 text-slate-300 mx-auto" />
-              <div>
-                <h4 className="font-bold text-slate-900 text-sm">Not in a Mess Pod yet</h4>
-                <p className="text-xs text-slate-500 mt-1">
-                  Team up with 2–4 flatmates to unlock 12% group discounts and sync vacation pauses.
+            <div className="py-4 space-y-4">
+              <div className="text-center space-y-1">
+                <div className="w-12 h-12 rounded-2xl bg-purple-50 text-purple-600 flex items-center justify-center mx-auto border border-purple-100 shadow-xs">
+                  <Users className="w-6 h-6" />
+                </div>
+                <h4 className="font-bold text-slate-900 text-sm">Roommate Mess Pod</h4>
+                <p className="text-xs text-slate-500 max-w-xs mx-auto">
+                  Team up with 2–4 flatmates to unlock 12% group discounts, buddy meal gifting, and synced vacation pauses.
                 </p>
               </div>
 
-              {showJoinInput ? (
-                <form onSubmit={handleJoin} className="space-y-2 max-w-xs mx-auto">
-                  <input
-                    type="text"
-                    required
-                    value={inviteCodeInput}
-                    onChange={e => setInviteCodeInput(e.target.value)}
-                    placeholder="Enter Invite Code (e.g. FLAT402)"
-                    className="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-mono uppercase text-center"
-                  />
+              {entryMode === 'create' ? (
+                <form onSubmit={handleCreate} className="space-y-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="flex items-center justify-between pb-1 border-b border-slate-200">
+                    <span className="text-xs font-bold text-slate-800">Start a New Mess Pod</span>
+                    <button
+                      type="button"
+                      onClick={() => setEntryMode('menu')}
+                      className="text-[11px] text-slate-500 hover:text-slate-800 font-semibold flex items-center gap-1"
+                    >
+                      <ArrowLeft className="w-3 h-3" /> Back
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Squad / Flat Name</label>
+                    <input
+                      type="text"
+                      required
+                      value={podNameInput}
+                      onChange={e => setPodNameInput(e.target.value)}
+                      placeholder="e.g. Flat 302 Squad"
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-500 outline-none"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Select Shared Mess</label>
+                    <select
+                      value={selectedMessId}
+                      onChange={e => setSelectedMessId(e.target.value)}
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:ring-2 focus:ring-purple-500 outline-none"
+                    >
+                      {messes.length === 0 ? (
+                        <option value="">Loading available messes...</option>
+                      ) : (
+                        messes.map(m => (
+                          <option key={m.id} value={m.id}>
+                            {m.name} ({m.location || 'Pune'})
+                          </option>
+                        ))
+                      )}
+                    </select>
+                  </div>
+
                   <button
                     type="submit"
-                    disabled={joining}
-                    className="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs"
+                    disabled={creating || !selectedMessId}
+                    className="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition shadow-xs flex items-center justify-center gap-1.5"
                   >
-                    {joining ? 'Joining...' : 'Join Pod'}
+                    <Plus className="w-4 h-4" />
+                    <span>{creating ? 'Creating Squad...' : 'Create Squad & Get Invite Code'}</span>
+                  </button>
+                </form>
+              ) : entryMode === 'join' ? (
+                <form onSubmit={handleJoin} className="space-y-3 p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                  <div className="flex items-center justify-between pb-1 border-b border-slate-200">
+                    <span className="text-xs font-bold text-slate-800">Join Roommate's Pod</span>
+                    <button
+                      type="button"
+                      onClick={() => setEntryMode('menu')}
+                      className="text-[11px] text-slate-500 hover:text-slate-800 font-semibold flex items-center gap-1"
+                    >
+                      <ArrowLeft className="w-3 h-3" /> Back
+                    </button>
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-slate-700 mb-1">Pod Invite Code</label>
+                    <input
+                      type="text"
+                      required
+                      value={inviteCodeInput}
+                      onChange={e => setInviteCodeInput(e.target.value)}
+                      placeholder="e.g. POD402"
+                      className="w-full p-2.5 bg-white border border-slate-200 rounded-xl text-xs font-mono uppercase text-center tracking-wider font-bold focus:ring-2 focus:ring-purple-500 outline-none"
+                    />
+                    <p className="text-[10px] text-slate-400 mt-1">Ask your roommate (Pod Leader) for their 6-character code.</p>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={joining || !inviteCodeInput.trim()}
+                    className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-xl text-xs transition shadow-xs flex items-center justify-center gap-1.5"
+                  >
+                    <UserPlus className="w-4 h-4" />
+                    <span>{joining ? 'Joining Pod...' : 'Join Roommate Pod'}</span>
                   </button>
                 </form>
               ) : (
-                <button
-                  onClick={() => setShowJoinInput(true)}
-                  className="px-4 py-2.5 rounded-2xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs"
-                >
-                  Join Roommate Pod with Code
-                </button>
+                <div className="space-y-2.5 pt-2">
+                  <button
+                    onClick={() => setEntryMode('create')}
+                    className="w-full p-3.5 rounded-2xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs flex items-center justify-between hover:from-purple-700 hover:to-indigo-700 transition shadow-sm"
+                  >
+                    <div className="flex items-center gap-2.5 text-left">
+                      <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
+                        <Plus className="w-4 h-4 text-white" />
+                      </div>
+                      <div>
+                        <div className="font-bold">Create a New Mess Pod</div>
+                        <div className="text-[10px] text-purple-200 font-normal">Become Pod Leader & invite flatmates</div>
+                      </div>
+                    </div>
+                    <span className="text-xs">➔</span>
+                  </button>
+
+                  <button
+                    onClick={() => setEntryMode('join')}
+                    className="w-full p-3.5 rounded-2xl bg-white border border-slate-200 text-slate-800 font-bold text-xs flex items-center justify-between hover:bg-slate-50 hover:border-purple-300 transition shadow-xs"
+                  >
+                    <div className="flex items-center gap-2.5 text-left">
+                      <div className="w-8 h-8 rounded-xl bg-purple-50 text-purple-700 flex items-center justify-center border border-purple-100">
+                        <Users className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="font-bold">Join Pod with Code</div>
+                        <div className="text-[10px] text-slate-500 font-normal">Enter roommate's invite code</div>
+                      </div>
+                    </div>
+                    <span className="text-xs text-slate-400">➔</span>
+                  </button>
+                </div>
               )}
             </div>
           )}
