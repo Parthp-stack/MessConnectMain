@@ -55,7 +55,7 @@ router.post('/join', (req, res) => {
 
   res.json({
     success: true,
-    message: `Joined "${group.name}"! Group discount applied.`,
+    message: `Joined "${group.name}"! Roommate pod connected.`,
     group
   });
 });

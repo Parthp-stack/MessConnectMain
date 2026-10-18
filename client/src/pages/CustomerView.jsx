@@ -635,7 +635,7 @@ export const CustomerView = ({
                         <Users className="w-4 h-4 text-purple-300 shrink-0" />
                         <div className="truncate">
                           <div className="font-bold text-[11px] text-white">Roommate Pods</div>
-                          <div className="text-[9px] text-emerald-300 font-semibold">Group meal savings</div>
+                          <div className="text-[9px] text-purple-300 font-semibold">Vacation sync & sharing</div>
                         </div>
                       </button>
                     </div>
@@ -688,7 +688,7 @@ export const CustomerView = ({
                     <Users className="w-4 h-4 text-purple-300 shrink-0" />
                     <div className="truncate">
                       <div className="font-bold text-[11px] text-white">Roommate Pods</div>
-                      <div className="text-[9px] text-emerald-300 font-semibold">Group discounts</div>
+                      <div className="text-[9px] text-purple-300 font-semibold">Vacation sync & sharing</div>
                     </div>
                   </button>
                 </div>
@@ -1000,7 +1000,7 @@ export const CustomerView = ({
                   <Users className="w-4 h-4 text-purple-600" />
                 </div>
                 <div className="font-bold text-xs text-purple-950">Roommate Squad</div>
-                <div className="text-[10px] text-emerald-700 font-semibold mt-0.5">12% OFF • 3 Flatmates</div>
+                <div className="text-[10px] text-purple-700 font-semibold mt-0.5">Vacation Sync • Roster</div>
               </button>
             </div>
 

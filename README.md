@@ -22,7 +22,7 @@
 | **Anti-Proxy Digital Meal Pass** | Dynamic QR + 4-Digit Rotating PIN | Prevents proxy dining and duplicate plates; real-time entrance status. |
 | **Dining Entrance Scanner** | Camera Simulator + PIN Keypad + Audio | Web Audio entrance chime (`ding-ding`) & duplicate alert buzzer (`buzz-buzz`). |
 | **Campus FlexiPass™ (Phase 3)** | Multi-Mess Unified Thali Pool | Dine across 6–10 partner kitchens with flexible meal credits. |
-| **Roommate Mess Pods (Phase 3)** | Squad Pooling & 12% Group Discount | Flatmate dining status, synchronized holiday pause, and buddy meal gifting. |
+| **Roommate Mess Pods (Phase 3)** | Squad Pooling & Vacation Sync | Flatmate dining status, synchronized holiday pause, and buddy meal gifting. |
 | **Demo Studio & Manual Storage**| Section 6 Developer Console | Add/Edit/Delete messes locally, reset seed data, export JSON backup. |
 
 ---

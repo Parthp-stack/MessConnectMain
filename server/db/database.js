@@ -1364,7 +1364,7 @@ class Database {
       adminName: admin.name,
       messId: mess.id,
       messName: mess.name,
-      discountPercent: 12,
+      discountPercent: 0,
       createdAt: new Date().toISOString().split('T')[0],
       members: [
         {

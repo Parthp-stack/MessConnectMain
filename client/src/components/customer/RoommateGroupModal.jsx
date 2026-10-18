@@ -176,16 +176,13 @@ export const RoommateGroupModal = ({ isOpen, onClose }) => {
               <Users className="w-3 h-3 text-purple-300" />
               Mess Pods (Phase 3)
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 text-[10px] font-bold">
-              12% OFF Applied
-            </span>
           </div>
 
           <h2 className="text-lg font-extrabold text-white">
             {group?.name || 'Roommate Mess Squad'}
           </h2>
           <p className="text-xs text-slate-300 mt-0.5">
-            Flatmate pooling: synchronized vacation pauses, meal sharing & group discounts.
+            Flatmate pooling: synchronized vacation pauses, live status & meal sharing.
           </p>
         </div>
 
@@ -212,14 +209,6 @@ export const RoommateGroupModal = ({ isOpen, onClose }) => {
                       <Copy className="w-3 h-3" />
                     </button>
                   </div>
-                </div>
-
-                <div className="p-2.5 rounded-2xl bg-purple-50 border border-purple-100 flex items-center justify-between text-xs">
-                  <div className="flex items-center gap-1.5 text-purple-900 font-bold">
-                    <Sparkles className="w-3.5 h-3.5 text-purple-600" />
-                    <span>Group Saving Advantage</span>
-                  </div>
-                  <span className="font-bold text-emerald-700">₹380/mo saved each</span>
                 </div>
               </div>
 
@@ -342,7 +331,7 @@ export const RoommateGroupModal = ({ isOpen, onClose }) => {
                 </div>
                 <h4 className="font-bold text-slate-900 text-sm">Roommate Mess Pod</h4>
                 <p className="text-xs text-slate-500 max-w-xs mx-auto">
-                  Team up with 2–4 flatmates to unlock 12% group discounts, buddy meal gifting, and synced vacation pauses.
+                  Team up with 2–4 flatmates for synchronized vacation pauses, live status tracking, and buddy meal gifting.
                 </p>
               </div>
 
