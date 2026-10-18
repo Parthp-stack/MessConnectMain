@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { api } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 import {
   CreditCard, Smartphone, ShieldCheck, CheckCircle2, Lock, X,
   ArrowRight, Loader2, AlertCircle, RefreshCw, Sparkles, Building2,
-  Calendar, Check, Receipt, ExternalLink
+  Calendar, Check, Receipt, ExternalLink, Phone, QrCode
 } from 'lucide-react';
 
 export const MockPaymentModal = ({
@@ -21,14 +22,17 @@ export const MockPaymentModal = ({
   actionType = 'SUBSCRIPTION',
   onSuccess
 }) => {
+  const { currentUser } = useAuth();
   const [config, setConfig] = useState(null);
   const [order, setOrder] = useState(null);
   const [orderLoading, setOrderLoading] = useState(false);
   const [orderError, setOrderError] = useState(null);
 
   const [method, setMethod] = useState('UPI'); // 'UPI', 'CARD', 'NETBANKING'
+  const [upiMode, setUpiMode] = useState('NUMBER'); // 'NUMBER' | 'VPA'
+  const [upiNumber, setUpiNumber] = useState(currentUser?.phone || '9423490513');
   const [upiId, setUpiId] = useState('student@oksbi');
-  const [upiApp, setUpiApp] = useState('gpay');
+  const [upiApp, setUpiApp] = useState('phonepe');
   const [processing, setProcessing] = useState(false);
   const [verifyError, setVerifyError] = useState(null);
   const [successData, setSuccessData] = useState(null);
@@ -121,7 +125,9 @@ export const MockPaymentModal = ({
         planId,
         subscriptionId,
         isRenewal,
-        paymentMethod: method === 'UPI' ? `Razorpay UPI (${upiApp.toUpperCase()})` : method === 'CARD' ? 'Razorpay Debit Card' : 'Razorpay NetBanking',
+        paymentMethod: method === 'UPI'
+          ? (upiMode === 'NUMBER' ? `UPI (${upiNumber || '9423490513'} • ${upiApp.toUpperCase()})` : `UPI (${upiId} • ${upiApp.toUpperCase()})`)
+          : method === 'CARD' ? 'Razorpay Debit Card' : 'Razorpay NetBanking',
         description: `${itemTitle} - ${itemSubtitle}`
       });
 
@@ -366,39 +372,138 @@ export const MockPaymentModal = ({
             {/* UPI Option */}
             {method === 'UPI' && (
               <div className="space-y-3 mb-4 p-3.5 rounded-2xl bg-slate-50 border border-slate-200/80">
-                <div className="grid grid-cols-3 gap-2">
-                  {[
-                    { id: 'gpay', label: 'Google Pay' },
-                    { id: 'phonepe', label: 'PhonePe' },
-                    { id: 'paytm', label: 'Paytm UPI' }
-                  ].map(app => (
-                    <button
-                      key={app.id}
-                      type="button"
-                      onClick={() => setUpiApp(app.id)}
-                      className={`p-2 rounded-xl border text-[11px] font-bold text-center transition cursor-pointer ${
-                        upiApp === app.id
-                          ? 'border-indigo-600 bg-indigo-50 text-indigo-900 shadow-xs'
-                          : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
-                      }`}
-                    >
-                      {app.label}
-                    </button>
-                  ))}
+                {/* Sub-toggle: UPI Mobile Number vs UPI ID */}
+                <div className="flex bg-slate-200/70 p-1 rounded-xl text-xs font-bold gap-1">
+                  <button
+                    type="button"
+                    onClick={() => setUpiMode('NUMBER')}
+                    className={`flex-1 py-1.5 px-2 rounded-lg transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                      upiMode === 'NUMBER'
+                        ? 'bg-white text-orange-700 shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>UPI Mobile Number</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setUpiMode('VPA')}
+                    className={`flex-1 py-1.5 px-2 rounded-lg transition flex items-center justify-center gap-1.5 cursor-pointer ${
+                      upiMode === 'VPA'
+                        ? 'bg-white text-orange-700 shadow-xs'
+                        : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <QrCode className="w-3.5 h-3.5" />
+                    <span>UPI ID / VPA</span>
+                  </button>
                 </div>
 
-                <div>
-                  <label className="text-[11px] font-semibold text-slate-600 block mb-1">
-                    Virtual Payment Address (UPI ID)
-                  </label>
-                  <input
-                    type="text"
-                    value={upiId}
-                    onChange={(e) => setUpiId(e.target.value)}
-                    placeholder="name@upi"
-                    className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 font-mono text-slate-800"
-                  />
-                </div>
+                {/* Sub-mode 1: UPI Mobile Number */}
+                {upiMode === 'NUMBER' ? (
+                  <div className="space-y-2.5">
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="text-[11px] font-semibold text-slate-700">
+                          10-Digit UPI Mobile Number
+                        </label>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setUpiNumber(currentUser?.phone || '9423490513');
+                            setUpiApp('phonepe');
+                          }}
+                          className="text-[10px] font-bold text-orange-600 hover:underline cursor-pointer flex items-center gap-1"
+                        >
+                          <Sparkles className="w-3 h-3" />
+                          <span>Use My Number ({currentUser?.phone || '9423490513'})</span>
+                        </button>
+                      </div>
+
+                      <div className="relative flex items-center">
+                        <span className="absolute left-3 text-xs font-bold text-slate-400 select-none">+91</span>
+                        <input
+                          type="tel"
+                          maxLength={10}
+                          value={upiNumber}
+                          onChange={(e) => setUpiNumber(e.target.value.replace(/\D/g, ''))}
+                          placeholder="e.g. 9423490513"
+                          className="w-full pl-11 pr-3 py-2.5 text-xs bg-white border border-slate-300 rounded-xl font-mono text-slate-900 font-bold focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        />
+                      </div>
+                    </div>
+
+                    {/* App Selector */}
+                    <div>
+                      <label className="text-[10px] font-semibold text-slate-500 block mb-1">
+                        Select Linked UPI App:
+                      </label>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { id: 'phonepe', label: 'PhonePe', handle: 'ybl' },
+                          { id: 'gpay', label: 'Google Pay', handle: 'okaxis' },
+                          { id: 'paytm', label: 'Paytm UPI', handle: 'paytm' }
+                        ].map(app => (
+                          <button
+                            key={app.id}
+                            type="button"
+                            onClick={() => setUpiApp(app.id)}
+                            className={`p-2 rounded-xl border text-[11px] font-bold text-center transition cursor-pointer ${
+                              upiApp === app.id
+                                ? 'border-orange-600 bg-orange-50 text-orange-900 shadow-xs ring-1 ring-orange-500/30'
+                                : 'border-slate-200 bg-white text-slate-600 hover:bg-slate-100'
+                            }`}
+                          >
+                            {app.label}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="p-2 rounded-xl bg-orange-50/60 border border-orange-200/60 text-[10px] text-orange-800 flex items-center justify-between">
+                      <span className="font-semibold">Linked UPI Address:</span>
+                      <span className="font-mono font-bold">
+                        {upiNumber || '9XXXXXXXXX'}@{upiApp === 'gpay' ? 'okaxis' : upiApp === 'phonepe' ? 'ybl' : 'paytm'}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  /* Sub-mode 2: UPI ID / VPA */
+                  <div className="space-y-2">
+                    <div>
+                      <label className="text-[11px] font-semibold text-slate-600 block mb-1">
+                        Virtual Payment Address (UPI ID)
+                      </label>
+                      <input
+                        type="text"
+                        value={upiId}
+                        onChange={(e) => setUpiId(e.target.value)}
+                        placeholder="e.g. name@upi or success@razorpay"
+                        className="w-full px-3 py-2 text-xs bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-orange-500 font-mono text-slate-800"
+                      />
+                    </div>
+
+                    <div className="flex items-center gap-1.5 flex-wrap pt-0.5">
+                      <span className="text-[10px] text-slate-400 font-semibold">Test VPAs:</span>
+                      <button
+                        type="button"
+                        onClick={() => setUpiId('success@razorpay')}
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 font-bold border border-emerald-200 hover:bg-emerald-100 cursor-pointer"
+                      >
+                        ⚡ success@razorpay
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setUpiId(`${currentUser?.phone || '9423490513'}@upi`)}
+                        className="text-[10px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200 hover:bg-slate-200 cursor-pointer"
+                      >
+                        {currentUser?.phone || '9423490513'}@upi
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
