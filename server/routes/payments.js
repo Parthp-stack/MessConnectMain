@@ -1,11 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const crypto = require('crypto');
+const Razorpay = require('razorpay');
 const db = require('../db/database');
 
 const RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID || 'rzp_test_prototype_sandbox';
 const RAZORPAY_KEY_SECRET = process.env.RAZORPAY_KEY_SECRET || 'prototype_mock_secret_key_2026';
 const RAZORPAY_WEBHOOK_SECRET = process.env.RAZORPAY_WEBHOOK_SECRET || '';
+
+// Initialize Razorpay SDK instance for real live/test order generation
+let razorpayClient = null;
+if (RAZORPAY_KEY_ID && RAZORPAY_KEY_SECRET && !RAZORPAY_KEY_ID.includes('prototype_sandbox')) {
+  try {
+    razorpayClient = new Razorpay({
+      key_id: RAZORPAY_KEY_ID,
+      key_secret: RAZORPAY_KEY_SECRET
+    });
+    console.log(`[Razorpay Engine] Initialized Razorpay SDK with Key ID: ${RAZORPAY_KEY_ID.slice(0, 8)}...`);
+  } catch (err) {
+    console.error('[Razorpay Initialization Error]:', err.message);
+  }
+}
 
 // Live mode only applies if a real commercial production key (starting with rzp_live_) is configured
 const isLiveCommercialMode = RAZORPAY_KEY_ID.startsWith('rzp_live_') && process.env.ENABLE_PAYMENT_SIMULATION !== 'true';
@@ -64,8 +79,8 @@ router.get(['/', '/user/:userId'], (req, res) => {
 });
 
 // 3. POST /api/payments/create-order & /api/payments/create
-// Creates a Razorpay Order. Validates server-side, extracts actual price from database!
-router.post(['/create-order', '/create'], (req, res) => {
+// Creates a Razorpay Order via official Razorpay Orders API.
+router.post(['/create-order', '/create'], async (req, res) => {
   const {
     amount,
     currency = 'INR',
@@ -150,7 +165,8 @@ router.post(['/create-order', '/create'], (req, res) => {
 
   const amountPaise = Math.round(finalAmount * 100);
   const receiptId = `rcpt_${Date.now()}`;
-  const orderId = `order_rzp_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  let orderId = null;
+  let isRealRazorpayOrder = false;
 
   const notes = {
     userId: String(userId),
@@ -162,6 +178,39 @@ router.post(['/create-order', '/create'], (req, res) => {
     isRenewal: Boolean(isRenewal)
   };
 
+  // Try creating a real order on Razorpay servers
+  if (razorpayClient) {
+    try {
+      const razorpayOrder = await razorpayClient.orders.create({
+        amount: amountPaise,
+        currency: currency.toUpperCase(),
+        receipt: receiptId.slice(0, 40),
+        notes: {
+          userId: String(userId),
+          messId: String(messId || ''),
+          planId: String(planId || ''),
+          purpose: notes.purpose
+        }
+      });
+      orderId = razorpayOrder.id;
+      isRealRazorpayOrder = true;
+      console.log(`[Razorpay Engine] Created genuine Razorpay order: ${orderId} for ₹${finalAmount}`);
+    } catch (rzpErr) {
+      console.error('[Razorpay Order Creation Failed]:', rzpErr?.error || rzpErr?.message || rzpErr);
+      if (isLiveCommercialMode) {
+        return res.status(502).json({
+          success: false,
+          message: `Razorpay Live Gateway Error: ${rzpErr?.error?.description || rzpErr?.message || 'Failed to initialize order on Razorpay.'}`,
+          details: rzpErr?.error || null
+        });
+      }
+      // In non-live test mode, fallback to generated test order if network fails
+      orderId = `order_rzp_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+    }
+  } else {
+    orderId = `order_rzp_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+  }
+
   // Record order in database with status: CREATED / PENDING
   const orderRecord = db.createPayment({
     orderId,
@@ -172,7 +221,7 @@ router.post(['/create-order', '/create'], (req, res) => {
     trialId: trialId || null,
     amount: finalAmount,
     currency: currency.toUpperCase(),
-    method: 'Razorpay (Test Mode)',
+    method: isRealRazorpayOrder ? (isLiveCommercialMode ? 'Razorpay (Live)' : 'Razorpay (Test Mode)') : 'Razorpay (Test Simulation)',
     status: 'CREATED',
     receiptNumber: receiptId,
     description: notes.purpose,
@@ -189,6 +238,7 @@ router.post(['/create-order', '/create'], (req, res) => {
     receipt: receiptId,
     notes,
     testMode: RAZORPAY_TEST_MODE,
+    isRealRazorpayOrder,
     plan: planDetails ? {
       id: planDetails.id,
       name: planDetails.name,
@@ -200,7 +250,9 @@ router.post(['/create-order', '/create'], (req, res) => {
       id: messDetails.id,
       name: messDetails.name
     } : null,
-    message: 'Razorpay payment order created successfully.'
+    message: isRealRazorpayOrder
+      ? 'Genuine Razorpay payment order created successfully.'
+      : 'Razorpay payment order initialized.'
   });
 });
 

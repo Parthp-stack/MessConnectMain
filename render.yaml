@@ -38,6 +38,12 @@ services:
         value: "MessConnect Verification"
       - key: ADMIN_EMAIL
         value: parthmhaske1234@gmail.com
+      - key: RAZORPAY_KEY_ID
+        sync: false
+      - key: RAZORPAY_KEY_SECRET
+        sync: false
+      - key: RAZORPAY_WEBHOOK_SECRET
+        sync: false
 
   # ==============================================================================
   # 2. FRONTEND CLIENT (React + Vite Static Site)
